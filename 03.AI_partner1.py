@@ -191,7 +191,7 @@ if prompt:
     #调用AI大模型
     # 与AI大模型进行交互(参数)
     response = client.chat.completions.create(
-        model="deepseek-flash",
+        model="deepseek-chat",
         messages=[
             {"role": "system", "content": system_prompt},
             *st.session_state.messages,
