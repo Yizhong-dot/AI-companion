@@ -197,8 +197,7 @@ if prompt:
             *st.session_state.messages,
         ],
         stream=True,
-        reasoning_effort="high",
-        extra_body={"thinking": {"type": "enabled"}}
+        reasoning_effort="high"
     )
     # 输出大模型返回的结果(非流式输出)
     # print("<----------- 大模型返回结果", response.choices[0].message.content)
