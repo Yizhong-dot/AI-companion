@@ -190,25 +190,32 @@ if prompt:
 
     #调用AI大模型
     # 与AI大模型进行交互(参数)
+    if st.session_state.get("IS_CLOUD",False):
+        use_stream = False
+    else:
+        use_stream = True
     response = client.chat.completions.create(
         model="deepseek-flash",
         messages=[
             {"role": "system", "content": system_prompt},
             *st.session_state.messages,
         ],
-        stream=True
+        stream=use_stream
     )
     # 输出大模型返回的结果(非流式输出)
-    # print("<----------- 大模型返回结果", response.choices[0].message.content)
-    # st.chat_message("assistant").write(response.choices[0].message.content)
+    if stream == False:
+        print("<----------- 大模型返回结果", response.choices[0].message.content)
+        st.chat_message("assistant").write(response.choices[0].message.content)
+        save_session()
 
     #流式输出返回结果
-    response_message = st.empty()
-    full_response = ""
-    for chunk in response:
-        if chunk.choices[0].delta.content is not None:
-            content = chunk.choices[0].delta.content
-            full_response += content
-            response_message.chat_message("assistant").write(full_response)
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
-    save_session()
+    if stream == True:
+        response_message = st.empty()
+        full_response = ""
+        for chunk in response:
+            if chunk.choices[0].delta.content is not None:
+                content = chunk.choices[0].delta.content
+                full_response += content
+                response_message.chat_message("assistant").write(full_response)
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+        save_session()
