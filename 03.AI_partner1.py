@@ -196,8 +196,7 @@ if prompt:
             {"role": "system", "content": system_prompt},
             *st.session_state.messages,
         ],
-        stream=True,
-        reasoning_effort="high"
+        stream=True
     )
     # 输出大模型返回的结果(非流式输出)
     # print("<----------- 大模型返回结果", response.choices[0].message.content)
